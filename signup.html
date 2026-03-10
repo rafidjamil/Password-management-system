@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Management System</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            text-align: center;
+            width: 400px;
+            height: 390px;
+            padding: 40px 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            /* transition: all 0.3s ease-in-out; */
+        }
+        
+        .card:hover {
+            /* transform: translateY(-5px); */
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .card h2 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #f1f1f1;
+        }
+        
+        .card p {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 25px;
+        }
+        
+        .pin-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .pin-inputs input {
+            width: 100%;
+            max-width: 371px;
+            padding: 12px 15px;
+            font-size: 15px;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: 0.3s;
+        }
+        
+        .pin-inputs input::placeholder {
+            color: #aaa;
+        }
+        
+        .pin-inputs input:focus {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        
+        .buttons button {
+            flex: 1;
+            padding: 12px 0;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+        
+        .confirm {
+            background: #00c853;
+            color: white;
+        }
+        
+        .confirm:hover {
+            background: #00e676;
+        }
+        
+        .decline {
+            background: #e53935;
+            color: white;
+        }
+        
+        .decline:hover {
+            background: #ff5252;
+        }
+        /* Sign up section */
+        
+        .signin {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+            color: #ddd;
+        }
+        
+        .signin a {
+            color: #00bcd4;
+            font-weight: bold;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        
+        .signin a:hover {
+            color: #26c6da;
+            text-decoration: underline;
+        }
+        
+        .logo {
+            position: absolute;
+            top: 24px;
+            left: 32px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #00e676;
+            letter-spacing: 1px;
+            user-select: none;
+            cursor: pointer;
+            text-shadow: 0 0 12px rgba(0, 230, 118, 0.4);
+            transition: transform .3s ease, text-shadow .3s ease;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 20px rgba(0, 230, 118, 0.7);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logo" onclick="window.location.href='Intro.html'">🔐 PMS</div>
+    <div class="card">
+        <div style="margin-bottom: 20px;">
+            <h2 style=" color: #00e676;">SIGN UP</h2>
+            <h2>WELCOME TO THE PASSWORD MANAGEMENT SYSTEM</h2>
+            <p>Please insert your ID & password to sign up</p>
+
+            <div class="pin-inputs">
+                <input type="text" placeholder="Full Name" id="reg-name">
+                <input type="text" placeholder="ID Number" id="reg-id">
+                <input type="password" placeholder="Password" id="reg-password">
+
+            </div>
+
+            <div class="buttons">
+                <button class="confirm" id="login-btn" onclick=" AuthSystem.registerUser()">CONFIRM</button>
+                <button class="decline" id="decline-btn" onclick="AuthSystem.decline()">DECLINE</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="signin">
+        If you have an account <a href="passlogin.html">Sign in</a> here
+    </div>
+
+</body>
+<script src="./passmange.js"></script>
+
+</html>

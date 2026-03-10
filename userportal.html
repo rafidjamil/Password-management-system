@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script> -->
+
+    <title>User Portal</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html,
+        body {
+            height: 100%;
+        }
+        
+        body {
+            font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+            background: radial-gradient(circle at 10% 10%, #072023 0%, transparent 25%), linear-gradient(135deg, #0f2027 0%, #203a43 40%, #2c5364 100%);
+            color: #eaf4f6;
+            /* -webkit-font-smoothing: antialiased; */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 28px;
+            gap: 18px;
+            /* min-height: 100vh; */
+        }
+        
+        .glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .g1 {
+            width: 360px;
+            height: 360px;
+            left: -100px;
+            top: -80px;
+            background: rgba(0, 230, 118, 0.06);
+        }
+        
+        .g2 {
+            width: 380px;
+            height: 380px;
+            right: -120px;
+            bottom: -60px;
+            background: rgba(3, 169, 244, 0.05);
+        }
+        /* -------- Top bar (logo + user + actions) -------- */
+        
+        .topbar {
+            width: min(1100px, 96vw);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        
+        .site-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        
+        .site-logo {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: #00e676;
+            cursor: pointer;
+            text-shadow: 0 0 10px rgba(0, 230, 118, 0.18);
+        }
+        
+        .site-logo .icon {
+            font-size: 20px;
+        }
+        
+        .user-badge {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 10px 14px;
+            border-radius: 12px;
+            color: #dff8ec;
+            font-weight: 600;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+        }
+        
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            background: linear-gradient(45deg, #00c1d4, #00e676);
+            color: #022;
+            box-shadow: 0 12px 30px rgba(0, 230, 118, 0.08);
+            transition: transform .22s ease, box-shadow .22s ease, opacity .18s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 45px rgba(0, 230, 118, 0.15);
+        }
+        /* secondary button */
+        
+        .btn-ghost {
+            background: rgba(255, 255, 255, 0.03);
+            color: #eaf4f6;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: none;
+        }
+        
+        .btn-ghost:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        /* -------- Main container card -------- */
+        
+        .container {
+            width: min(1100px, 96vw);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+            z-index: 10;
+        }
+        
+        .panel {
+            /* position: absolute; */
+            border-radius: 16px;
+            padding: 20px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 20px 60px rgba(3, 10, 18, 0.6);
+            backdrop-filter: blur(10px) saturate(120%);
+        }
+        
+        .panel .title-row {
+            /* position: fixed; */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        
+        .panel h2 {
+            font-size: 18px;
+            color: #f7fcfd;
+            letter-spacing: -0.2px;
+        }
+        
+        .panel p.sub {
+            color: rgba(234, 244, 246, 0.75);
+            font-size: 13px;
+        }
+        /* -------- Cards list -------- */
+        
+        .cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 6px;
+        }
+        
+        .card-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 14px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0.01));
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+        
+        .card-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
+        }
+        
+        .card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        
+        .site-name {
+            font-weight: 700;
+            color: #eaf4f6;
+            font-size: 15px;
+        }
+        
+        .site-meta {
+            color: rgba(234, 244, 246, 0.75);
+            font-size: 13px;
+        }
+        
+        .card-body {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .field {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .label {
+            font-size: 12px;
+            color: rgba(234, 244, 246, 0.65);
+            min-width: 70px;
+        }
+        
+        .value {
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            color: #eaf4f6;
+            font-weight: 600;
+            min-width: 160px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            color: #eaf4f6;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform .14s ease;
+            font-weight: 700;
+        }
+        
+        .icon-btn:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        
+        .pw-hidden {
+            letter-spacing: 2px;
+            font-family: system-ui;
+        }
+        /* small actions row below each card */
+        
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+            justify-content: flex-end;
+        }
+        
+        .danger {
+            background: linear-gradient(45deg, #e53935, #ff5252);
+            color: white;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+        }
+        /* empty state */
+        
+        .empty {
+            text-align: center;
+            color: rgba(234, 244, 246, 0.7);
+            padding: 34px;
+            border-radius: 12px;
+            border: 1px dashed rgba(255, 255, 255, 0.04);
+        }
+        /* Modal (new entry) */
+        
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(1, 6, 8, 0.479);
+            z-index: 80;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity .18s ease, visibility .18s ease;
+        }
+        
+        .modal-backdrop.show {
+            visibility: visible;
+            opacity: 5;
+            /* background: ; */
+        }
+        
+        .modal {
+            width: 420px;
+            max-width: 92vw;
+            padding: 18px;
+            border-radius: 12px;
+            /* background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)); */
+            /* background: rgba(18, 4, 4, 0.653); */
+            background: radial-gradient(circle at 0% 0%, #072023 0%, transparent 25%), linear-gradient(100deg, #203a43 100%, #2c5364 100%);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+        }
+        
+        .modal h3 {
+            margin-bottom: 8px;
+            color: #f7fcfd;
+        }
+        
+        .modal label {
+            font-size: 13px;
+            color: rgba(234, 244, 246, 0.75);
+            display: block;
+            margin-top: 8px;
+        }
+        
+        .modal input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-top: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.02);
+            color: #eaf4f6;
+        }
+        
+        .modal .row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        /* responsive small */
+        
+        @media (max-width:600px) {
+            .value {
+                min-width: 120px;
+            }
+            .label {
+                display: none;
+            }
+        }
+        
+        .card-item {
+            width: 32.2%;
+            /* min-width: 150px; */
+        }
+        
+        .card-item {
+            padding: 16px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+        }
+        
+        .cards {
+            /* display: grid; */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            /* margin-top: 10px; */
+        }
+        
+        .cardContainer {
+            width: 100%;
+            max-width: 1100px;
+            gap: 144px;
+            gap: inherit;
+        }
+        /* Make topbar sticky */
+        /* Fixed Topbar - always stays on top */
+        
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: rgba(15, 32, 39, 0.75);
+            backdrop-filter: blur(12px) saturate(160%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 16px 20px;
+            box-shadow: 0 2px 18px rgba(0, 0, 0, 0.4);
+        }
+        /* Add spacing so content doesn’t hide behind fixed topbar */
+        
+        body {
+            padding-top: 90px;
+            background: radial-gradient(circle at 10% 10%, #072023 0%, transparent 25%), linear-gradient(135deg, #0f2027 0%, #203a43 40%, #2c5364 100%);
+            background-attachment: fixed;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-blend-mode: overlay;
+            color: #eaf4f6;
+            font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            min-height: 100vh;
+        }
+        /* Optional: subtle shadow fade below the topbar */
+        
+        .topbar::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.25), transparent);
+            pointer-events: none;
+        }
+        
+        .field {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            width: 100%;
+        }
+        
+        .value {
+            flex: 1;
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            color: #eaf4f6;
+            font-weight: 600;
+            min-width: 160px;
+        }
+        
+        .icons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .icon-edit,
+        .icon-eye {
+            font-size: 14px;
+            opacity: 0.7;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+        
+        .icon-edit:hover,
+        .icon-eye:hover {
+            opacity: 1;
+        }
+        
+        .modal {
+            position: absolute !important;
+            width: 420px;
+            max-width: 92vw;
+            padding: 18px;
+            border-radius: 12px;
+            /* margin-top: 100px !important; */
+            /* background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)); */
+            /* background: rgba(18, 4, 4, 0.653); */
+            background: radial-gradient(circle at 0% 0%, #072023 0%, transparent 25%), linear-gradient(100deg, #203a43 100%, #2c5364 100%);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+            /* background: rgba(1, 6, 8, 0.479); */
+        }
+        
+        .modal-backdrop.show {
+            display: flex;
+        }
+        /* ---------------- Responsive Enhancements ---------------- */
+        /* Tablet (≤1024px) */
+        
+        @media (max-width: 1024px) {
+            .cardContainer {
+                gap: 6px !important;
+                width: 97% !important;
+                margin-left: 26px !important;
+            }
+            .card-item {
+                width: 48% !important;
+                min-width: 300px;
+            }
+            /* .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            } */
+            .container {
+                width: 94%;
+            }
+            .modal {
+                width: 380px;
+            }
+        }
+        /* Mobile (≤768px) */
+        
+        @media (max-width: 768px) {
+            /* body {
+                padding: 16px;
+            } */
+            .card-item {
+                width: 97% !important;
+                /* min-width: unset; */
+            }
+            .cardContainer {
+                margin-right: 10px;
+            }
+            .card-body {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .field {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+            }
+            .value {
+                width: 100%;
+            }
+            /* .topbar {
+                padding: 14px;
+                flex-direction: column;
+                align-items: flex-start; */
+            /* } */
+            .site-logo {
+                font-size: 16px;
+            }
+            .user-badge {
+                font-size: 14px;
+                padding: 8px 10px;
+            }
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+            .modal {
+                width: 92%;
+                padding: 16px;
+            }
+            .panel {
+                /* margin-top: 70px; */
+                /* width: 1200px; */
+            }
+        }
+        /* Extra small (≤480px) */
+        
+        @media (max-width: 480px) {
+            .card-item {
+                padding: 12px;
+                width: 96% !important;
+            }
+            .site-name {
+                font-size: 14px;
+            }
+            .label {
+                display: none;
+            }
+            .value {
+                font-size: 13px;
+                min-width: 100%;
+            }
+            .icon-edit,
+            .icon-eye {
+                font-size: 13px;
+            }
+            .modal {
+                width: 95%;
+            }
+            .btn {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+            .panel {
+                /* margin-top: 70px; */
+                /* margin-right: 10px; */
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .card-item {
+                width: 92% !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+
+
+
+    <div class="topbar">
+        <div class="site-left">
+            <div class="site-logo" id="go-home" title="Home">
+                <!-- <span class="icon">🔐</span>
+                <span>PMS</span> -->
+            </div>
+
+            <div class="user-badge" id="user-name">Hi, </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn" id="openModalBtn">+ New</button>
+            <button class="btn btn-ghost" id="btn-logout" onclick="AuthSystem.logout()">Logout</button>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="panel">
+            <div class="title-row">
+                <div>
+                    <h2>Your Vault</h2>
+                    <p class="sub">All stored credentials are shown below. Click +New to add another entry.</p>
+                </div>
+            </div>
+
+            <div class="cards" id="cards-list">
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-backdrop" id="myModal">
+        <div class="modal">
+            <h3>Add New Credential</h3>
+            <label>Site URL/Name</label>
+            <input id="m-site" placeholder="site.com/site" />
+            <label>Username</label>
+            <input id="m-username" placeholder="User name" />
+            <label>Email/Number </label>
+            <input id="m-email" placeholder="Email or Number" />
+            <label>Password</label>
+            <input id="m-password" placeholder="Enter password" />
+            <div class="row" style="margin-top:14px; justify-content:flex-end;">
+                <button class="btn btn-ghost" id="closeModalBtn">Cancel</button>
+                <button class="btn" id="m-save" onclick="AuthSystem.save()" type="button">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="myModal2">
+        <div class="modal">
+            <h3>Edit Previous Credential</h3>
+            <label>Site URL/Name</label>
+            <input id="m-site2" placeholder="site.com/site" />
+            <label>Username</label>
+            <input id="m-username2" placeholder="User name" />
+            <label>Email/Number </label>
+            <input id="m-email2" placeholder="Email or Number" />
+            <label>Password</label>
+            <input id="m-password2" placeholder="Enter password" />
+            <div class="row" style="margin-top:14px ; justify-content:flex-end;">
+                <button class="btn btn-ghost" id="closeModalBtn2">Cancel</button>
+                <button class="btn" id="m-save2" onclick="AuthSystem.save2()">Save</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <!-- <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirm to delete the card</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="AuthSystem.delete()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <div style="display: flex; flex-wrap: wrap;  gap: inherit; width: 100% ;" class="cardContainer">
+
+        <div id="cardContainer" style="width: 100%;
+                border: 1px solid black;
+                 display: contents;">
+
+
+            <div class="card-item template" style="width: 32.2%;;">
+                <div class="card-head">
+                    <div class="site-name"></div>
+
+
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <div class="icons">
+                            <i class="fa-solid fa-pen-to-square icon-edit" id="openModalBtn2"></i>
+                            <div class="icons"> <i id="delete" onclick="AuthSystem.delete()" class="fa-solid fa-trash icon-edit"></i> </div>
+                        </div>
+
+                        <!-- delete -->
+
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="field">
+                        <span class="label">Username:</span>
+                        <span class="value username"></span>
+                        <!-- <div class="icons"> <i class="fa-solid fa-pen-to-square icon-edit"></i> </div> -->
+                    </div>
+
+                    <div class="field"> <span class="label">Email/Number:</span> <span class="value email"></span>
+                        <!-- <div class="icons"> <i class="fa-solid fa-pen-to-square icon-edit"></i> </div> -->
+                    </div>
+
+                    <div class="field"> <span class="label">Password:</span> <span class="value pw-hidden password" data-password="mypassword">••••••••</span>
+                        <div class="icons"> <i class="fa-solid fa-eye icon-eye" onclick="togglePassword(this)"></i> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- <button id="hello">test</button> -->
+
+
+    <script src="./passmange.js"></script>
+
+
+
+
+</body>
+
+</html>
